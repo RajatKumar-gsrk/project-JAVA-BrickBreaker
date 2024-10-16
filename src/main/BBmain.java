@@ -17,7 +17,7 @@ public class BBmain{
         
         
        // main_frame.setSize(WIDTH, HEIGHT);//window open size
-        main_frame.setResizable(true);//window resizeable?
+        main_frame.setResizable(false);//window resizeable?
         main_frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//action on close button
         main_frame.setVisible(true);//is vindow visible?
 
