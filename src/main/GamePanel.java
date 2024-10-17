@@ -75,7 +75,7 @@ public class GamePanel extends JPanel /* implements Runnable */{
 
         brickSplosions = new ArrayList<brickSplosion>();
 
-        play_sound("file:./resources/mute.wav", 0);
+        play_sound("file:./resources/mute.wav", 0);//path is relative to current working directory
 
         play_start_level_sound();
         reset_display_start_time();

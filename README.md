@@ -16,3 +16,10 @@ Meanwhile, the compiled output files will be generated in the `bin` folder by de
 ## Dependency Management
 
 The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).
+
+
+## just learned that "file:./path" this is relative to current working directory and not where the classes are located
+
+so just updated directory structure so the project runs from root folder
+
+also created a launch.json to set working directory to root everytime the project is launche dform run button

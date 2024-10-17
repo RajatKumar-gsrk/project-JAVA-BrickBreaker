@@ -1,0 +1,23 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Current File",
+            "request": "launch",
+            "mainClass": "${file}",
+            "cwd": "${workspaceFolder}"  // This ensures the working directory is set to the project root
+        },
+        {
+            "type": "java",
+            "name": "BBmain",
+            "request": "launch",
+            "mainClass": "main.BBmain",
+            "projectName": "BrickBreaker_9ef28032",
+            "cwd": "${workspaceFolder}"  // This ensures the working directory is set to the project root
+        }
+    ]
+}
