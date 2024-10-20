@@ -30,7 +30,7 @@ public class GamePanel extends JPanel /* implements Runnable */{
     private boolean screen_shake_active;
     private long display_start_time;
     private long screen_shake_timer;
-    private int level, start_level = 1, max_level = 2;//to change levels
+    private int level, start_level = 1, max_level = 3;//to change levels
 
     //entities
     private theBall main_ball;
