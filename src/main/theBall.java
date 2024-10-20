@@ -4,6 +4,7 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.util.Random;
 
 public class theBall {
 
@@ -13,13 +14,23 @@ public class theBall {
     private boolean ballbrick_collision;
     private Color color;
 
-    public theBall(double x_value, double y_value, double dx_value, double dy_value, int ball_size_value){
+    public theBall(double x_value, double y_value, int ball_size_value){
+        
         x = x_value;
         y = y_value;
-        dx = dx_value;
-        dy = dy_value;
+
+        double[] dx_value = {-5, -4, -3, -2, 2, 3, 4, 5};
+        int dx_value_indx = new Random().nextInt(dx_value.length);//select random int from array size
+        dx = dx_value[dx_value_indx];
+        
+        double[] dy_value = {3, 4, 5, 6};
+        int dy_value_indx = new Random().nextInt(dy_value.length);
+        dy = dy_value[dy_value_indx];
+
         ball_size = ball_size_value;
+        
         ballbrick_collision = true;//used for ghost ball
+
         color = Color.WHITE;
     }
 

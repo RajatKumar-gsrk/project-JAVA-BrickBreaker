@@ -58,7 +58,7 @@ public class GamePanel extends JPanel /* implements Runnable */{
 
         g_main.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        main_ball = new theBall((BBmain.WIDTH/2 - 10), (BBmain.HEIGHT/2 + 100), 2, 6, 15);
+        main_ball = new theBall((BBmain.WIDTH/2 - 10), (BBmain.HEIGHT/2 + 100), 15);
 
         main_Paddel = new thePaddel(75, 20);
 
