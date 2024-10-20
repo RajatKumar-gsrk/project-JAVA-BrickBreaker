@@ -23,3 +23,6 @@ The `JAVA PROJECTS` view allows you to manage your dependencies. More details ca
 so just updated directory structure so the project runs from root folder
 
 also created a launch.json to set working directory to root everytime the project is launche dform run button
+<br>
+<br>
+Keep in mind, to use the jar file you also need the resources directory.
