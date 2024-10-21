@@ -18,7 +18,7 @@ public class theMap {
     public theMap(int file_number){
         init(file_number);//for map
         map_padding = 50;
-        brick_padding = 10;
+        brick_padding = 5;
         brick_height = (BBmain.HEIGHT/2 - map_padding) / rows - brick_padding;
         brick_width = (BBmain.WIDTH - 2 * map_padding) / cols - brick_padding;
     }

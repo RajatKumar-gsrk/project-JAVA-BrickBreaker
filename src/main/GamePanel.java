@@ -58,9 +58,9 @@ public class GamePanel extends JPanel /* implements Runnable */{
 
         g_main.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        main_ball = new theBall((BBmain.WIDTH/2 - 10), (BBmain.HEIGHT/2 + 100), 12);
+        main_ball = new theBall((BBmain.WIDTH/2 - 10), (BBmain.HEIGHT/2 + 100), 15);
 
-        main_Paddel = new thePaddel(75, 20);
+        main_Paddel = new thePaddel(80, 20);
 
         main_mouse_movement = new mouseMovement();
 
@@ -200,24 +200,24 @@ public class GamePanel extends JPanel /* implements Runnable */{
             play_sound("file:./resources/ball_paddel_hit.wav", 0);
             double ball_speed_y = Math.abs(main_ball.getDY()) + 1;// > default ball_speed y
             double ball_speed_x = Math.abs(main_ball.getDX()) + 1;
-            if(!powerUps.get_fastball_deactivate()){
-                ball_speed_y += 10;
-            }
-            if(ball_rectangle.getMaxY() > paddel_rectangle.getMinY() + ball_speed_y + 1){
-                if(ball_rectangle.getMaxX() < paddel_rectangle.getMinX() + ball_speed_x){//left collision
+            if(ball_rectangle.getMaxY() > paddel_rectangle.getMinY() + ball_speed_y){
+                if(ball_rectangle.getMaxX() < paddel_rectangle.getMinX() + ball_speed_x + 1){//left collision
                     main_ball.setX(paddel_rectangle.getMinX() - main_ball.get_ball_size() - 1);
                     if(main_ball.getDY() < 0){
                         main_ball.setDX(main_ball.getDX() - 1);
                     }else{
                         main_ball.setDX(-main_ball.getDX());
                     }
-                }else if(ball_rectangle.getMinX() > paddel_rectangle.getMaxX() - ball_speed_x){//right collision
+                }else if(ball_rectangle.getMinX() > paddel_rectangle.getMaxX() - ball_speed_x - 1){//right collision
                     main_ball.setX(paddel_rectangle.getMaxX() + 1);
                     if(main_ball.getDY() > 0){
                         main_ball.setDX(main_ball.getDX() + 1);
                     }else{
                         main_ball.setDX(-main_ball.getDX());
                     }
+                }else{//ball collided in middle
+                    main_ball.setY(main_Paddel.getY() - main_ball.get_ball_size() - 1);
+                    main_ball.setDY(-main_ball.getDY());
                 }
             }else{
                 main_ball.setY(main_Paddel.getY() - main_ball.get_ball_size() - 1);
@@ -271,9 +271,6 @@ public class GamePanel extends JPanel /* implements Runnable */{
         int brick_padding = main_map.get_brick_padding();
         int rows = main_map.getMap_rows(), cols = main_map.getMap_cols();
         double ball_speed_y = Math.abs(main_ball.getDY()) + 1;
-        if(!powerUps.get_fastball_deactivate()){
-            ball_speed_y += 10;
-        }
         double ball_speed_x = Math.abs(main_ball.getDX()) + 1;
 
         map_collision_loop: for(int row = 0; row < rows; row += 1){//loop with label 
@@ -341,16 +338,26 @@ public class GamePanel extends JPanel /* implements Runnable */{
                             main_ball.setDX(main_ball.getDX() + ball_speed_change_x);
 
                             if(ball_hitbox.getMaxX() < brick_x + ball_speed_x){//left
-                                main_ball.setDX(-main_ball.getDX());
+                                if(main_ball.getDX() > 0 ){
+                                    main_ball.setDX(-main_ball.getDX());
+                                }
                                 main_ball.setX(brick_x - main_ball.get_ball_size() - 1);
                             }else if(ball_hitbox.getMinX() > brick_hitbox.getMaxX() - ball_speed_x){//right
-                                main_ball.setDX(-main_ball.getDX());
+                                if(main_ball.getDX() < 0 ){
+                                    main_ball.setDX(-main_ball.getDX());
+                                }
                                 main_ball.setX(brick_hitbox.getMaxX() + 1);
-                            }else if(ball_hitbox.getMaxY() < brick_y + ball_speed_y){//up
-                                main_ball.setDY(-main_ball.getDY());
+                            }
+                            //if collision break include this with else if
+                            if(ball_hitbox.getMaxY() < brick_y + ball_speed_y){//up
+                                if(main_ball.getDY() > 0){
+                                    main_ball.setDY(-main_ball.getDY());
+                                }
                                 main_ball.setY(brick_y - main_ball.get_ball_size()- 1);
                             }else if(ball_hitbox.getMinY() > brick_hitbox.getMaxY() - ball_speed_y){//down
-                                main_ball.setDY(-main_ball.getDY());
+                                if(main_ball.getDY() < 0){
+                                    main_ball.setDY(-main_ball.getDY());
+                                }
                                 main_ball.setY(brick_hitbox.getMaxY() + 1);
                             }
                         }
@@ -403,11 +410,7 @@ public class GamePanel extends JPanel /* implements Runnable */{
                     if(powerUps.get_fastball_deactivate()){
                         play_sound("file:./resources/power_down.wav", 0);
                         main_ball.set_ballcolor(powerUps.FASTCOLOR);
-                        if(main_ball.getDY() < 0){//reset in ball class.update
-                            main_ball.setDY(main_ball.getDY() - 10);
-                        }else{
-                            main_ball.setDY(main_ball.getDY() + 10);
-                        }
+                        main_ball.setDY(2 * main_ball.getDY());
                         powerUps.set_fastball_deactivate(false);
                     }
                 }

@@ -19,13 +19,11 @@ public class theBall {
         x = x_value;
         y = y_value;
 
-        double[] dx_value = {-5, -4, -3, -2, 2, 3, 4, 5};
+        double[] dx_value = {-4, -3, -2, 2, 3, 4};
         int dx_value_indx = new Random().nextInt(dx_value.length);//select random int from array size
         dx = dx_value[dx_value_indx];
         
-        double[] dy_value = {3, 4, 5, 6};
-        int dy_value_indx = new Random().nextInt(dy_value.length);
-        dy = dy_value[dy_value_indx];
+        dy = 6;
 
         ball_size = ball_size_value;
         
@@ -37,11 +35,7 @@ public class theBall {
     //update ball
     public void update(){
         if(!powerUps.get_fastball_deactivate() && (System.nanoTime() - powerUps.get_fastball_time()) / 1000000 > 10000){
-            if(getDY() < 0){//reset in ball class.update
-                setDY(getDY() + 10);
-            }else{
-                setDY(getDY() - 10);
-            }
+            setDY(getDY() / 2);//resets in update 
             set_ballcolor(Color.WHITE);
             powerUps.set_fastball_deactivate(true);
         }
