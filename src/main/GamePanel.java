@@ -482,9 +482,9 @@ public class GamePanel extends JPanel /* implements Runnable */{
         int x = (BBmain.WIDTH - f_matrics.stringWidth("LOSER!!"))/2;
         int y = (BBmain.HEIGHT - f_matrics.getHeight())/2;
         g_main.setColor(Color.WHITE);
-        g_main.fillRect(x, y, f_matrics.stringWidth("LOSER!!"), f_matrics.getHeight());
+        g_main.fillRect(350, 150, BBmain.WIDTH - 700, BBmain.HEIGHT - 300 /* f_matrics.stringWidth("LOSER!!"), f_matrics.getHeight() */);
         g_main.setColor(Color.RED);
-        g_main.drawString("LOSER!!", x, y + f_matrics.getHeight() - 5);
+        g_main.drawString("LOSER!!", x, y + f_matrics.getHeight() - 5 );
         running = false;
     }
 

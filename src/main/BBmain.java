@@ -3,7 +3,7 @@ package main;
 import javax.swing.JFrame;
 
 public class BBmain{
-    //feilds
+    //feilds, don't change
     public static final int WIDTH = 1280, HEIGHT = 720;
 
     public static void main(String[] args) {
