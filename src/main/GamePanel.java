@@ -2,7 +2,11 @@ package main;
 
 import java.util.ArrayList;
 
+import java.io.File;
+
 import javax.swing.JPanel;
+
+import javax.imageio.ImageIO;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -15,9 +19,12 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 import java.awt.Rectangle;//rectangles to make hitbox
+
 import java.net.MalformedURLException;
 import java.net.URL;
+
 import javax.sound.sampled.*;
+
 import java.io.IOException;
 
 public class GamePanel extends JPanel /* implements Runnable */{
@@ -25,9 +32,10 @@ public class GamePanel extends JPanel /* implements Runnable */{
 
     //fields
     private boolean running;
+    private boolean screen_shake_active;
+    private boolean game_pause;
     private BufferedImage main_image;
     private Graphics2D g_main;//main graphics handler
-    private boolean screen_shake_active;
     private long display_start_time;
     private long screen_shake_timer;
     private int level, start_level = 1, max_level = 3;//to change levels
@@ -41,6 +49,10 @@ public class GamePanel extends JPanel /* implements Runnable */{
     private ArrayList<powerUps> powers;
     private ArrayList<brickSplosion> brickSplosions;
 
+    //buttons
+    private BufferedImage exit_icon, pause_icon, play_icon, restart_icon;
+    private Rectangle exit_Rectangle, pause_Rectangle, play_Rectangle, resetart_Rectangle;
+
     //constructor
     public GamePanel(){
         init(start_level);
@@ -50,6 +62,7 @@ public class GamePanel extends JPanel /* implements Runnable */{
     public void init(int level_value){
         running = true;
         screen_shake_active = false;
+        game_pause = true;
         screen_shake_timer = System.nanoTime();
 
         main_image = new BufferedImage(BBmain.WIDTH, BBmain.HEIGHT, BufferedImage.TYPE_INT_RGB);
@@ -79,6 +92,9 @@ public class GamePanel extends JPanel /* implements Runnable */{
 
         play_start_level_sound();
         reset_display_start_time();
+
+        set_buttons();
+
     }
 
     /* @Override
@@ -142,6 +158,8 @@ public class GamePanel extends JPanel /* implements Runnable */{
             
             main_map.draw(g_main);
             main_hud.drawHUD(g_main);
+
+            draw_buttons();
 
             for(powerUps power : powers){
                 power.draw(g_main);
@@ -512,5 +530,46 @@ public class GamePanel extends JPanel /* implements Runnable */{
 
     private void play_start_level_sound(){
         play_sound("file:./resources/level_start.wav", 0);
+    }
+
+    private void set_buttons(){
+        try {
+            File exit_icon_file = new File("./resources/buttons/exit_button.png");
+            exit_icon = ImageIO.read(exit_icon_file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            File pause_icon_file = new File("./resources/buttons/pause_icon.png");
+            pause_icon = ImageIO.read(pause_icon_file);
+            pause_Rectangle = new Rectangle(150, 1, pause_icon.getWidth(), (int)(1.5 * pause_icon.getHeight()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            File play_icon_file = new File("./resources/buttons/play_icon.png");
+            play_icon = ImageIO.read(play_icon_file);
+            play_Rectangle = new Rectangle(150, 1, play_icon.getWidth(), (int)(1.5 * play_icon.getHeight()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            File restart_icon_file = new File("./resources/buttons/restart_button.png");
+            restart_icon = ImageIO.read(restart_icon_file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void draw_buttons(){
+        if(game_pause){
+            g_main.drawImage(play_icon, play_Rectangle.x, play_Rectangle.y, null);
+        }else{
+            g_main.drawImage(pause_icon, pause_Rectangle.x, pause_Rectangle.y, null);
+        }
+        
     }
 }
