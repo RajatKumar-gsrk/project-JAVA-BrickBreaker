@@ -54,9 +54,11 @@ public class theBall {
 
         if(x <= 0){
             dx = -dx;
+            setX(1);
         }
         if(y <= 0){
             dy = -dy;
+            setY(1);
         }
         if(x >= (BBmain.WIDTH - ball_size)){//ball size is calculated from top-right corner and not from the center
             dx = -dx;
