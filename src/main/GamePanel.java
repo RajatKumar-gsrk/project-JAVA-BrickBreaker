@@ -17,6 +17,7 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.awt.Rectangle;//rectangles to make hitbox
 
@@ -44,6 +45,7 @@ public class GamePanel extends JPanel /* implements Runnable */{
     private theBall main_ball;
     private thePaddel main_Paddel;
     private mouseMovement main_mouse_movement;
+    private mouseButtons main_mouse_buttons;
     private theMap main_map;
     private theHUD main_hud;
     private ArrayList<powerUps> powers;
@@ -51,7 +53,7 @@ public class GamePanel extends JPanel /* implements Runnable */{
 
     //buttons
     private BufferedImage exit_icon, pause_icon, play_icon, restart_icon;
-    private Rectangle exit_Rectangle, pause_Rectangle, play_Rectangle, resetart_Rectangle;
+    private Rectangle exit_Rectangle, pause_Rectangle, play_Rectangle, restart_Rectangle;
 
     //constructor
     public GamePanel(){
@@ -62,7 +64,7 @@ public class GamePanel extends JPanel /* implements Runnable */{
     public void init(int level_value){
         running = true;
         screen_shake_active = false;
-        game_pause = true;
+        game_pause = false;
         screen_shake_timer = System.nanoTime();
 
         main_image = new BufferedImage(BBmain.WIDTH, BBmain.HEIGHT, BufferedImage.TYPE_INT_RGB);
@@ -76,8 +78,10 @@ public class GamePanel extends JPanel /* implements Runnable */{
         main_Paddel = new thePaddel(80, 20);
 
         main_mouse_movement = new mouseMovement();
-
         addMouseMotionListener(main_mouse_movement);//adds mouse motion detection to panel
+
+        main_mouse_buttons = new mouseButtons();//adds mouse buttons functionality to panel
+        addMouseListener(main_mouse_buttons);
 
         level = level_value;
         main_map = new theMap(level);
@@ -105,8 +109,10 @@ public class GamePanel extends JPanel /* implements Runnable */{
     public void playing(){
         while(running){
             //update
-            update();
-
+            if(!game_pause){
+                update();
+            }
+            
             //draw
             draw();
 
@@ -208,6 +214,47 @@ public class GamePanel extends JPanel /* implements Runnable */{
         public void mouseMoved(MouseEvent e) {
             main_Paddel.movePaddel(e.getX());
         }
+    }
+    private class mouseButtons implements MouseListener{
+
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            int x = e.getX();
+            int y = e.getY();
+
+            if(pause_Rectangle.contains(x, y)){
+                game_pause = !game_pause;
+            }
+
+            if(restart_Rectangle.contains(x, y)){
+                
+            }
+
+            if(exit_Rectangle.contains(x,y)){
+                
+            }
+        }
+
+        @Override
+        public void mousePressed(MouseEvent e) {
+            // TODO Auto-generated method stub
+        }
+
+        @Override
+        public void mouseReleased(MouseEvent e) {
+            // TODO Auto-generated method stub
+        }
+
+        @Override
+        public void mouseEntered(MouseEvent e) {
+            // TODO Auto-generated method stub
+        }
+
+        @Override
+        public void mouseExited(MouseEvent e) {
+            // TODO Auto-generated method stub
+        }
+        
     }
 
     public void collision_check_paddel(){
@@ -503,6 +550,9 @@ public class GamePanel extends JPanel /* implements Runnable */{
         g_main.fillRect(350, 150, BBmain.WIDTH - 700, BBmain.HEIGHT - 300 /* f_matrics.stringWidth("LOSER!!"), f_matrics.getHeight() */);
         g_main.setColor(Color.RED);
         g_main.drawString("LOSER!!", x, y + f_matrics.getHeight() - 5 );
+
+        g_main.drawImage(restart_icon, restart_Rectangle.x, restart_Rectangle.y, null);
+        g_main.drawImage(exit_icon, exit_Rectangle.x, exit_Rectangle.y, null);
         running = false;
     }
 
@@ -534,8 +584,9 @@ public class GamePanel extends JPanel /* implements Runnable */{
 
     private void set_buttons(){
         try {
-            File exit_icon_file = new File("./resources/buttons/exit_button.png");
+            File exit_icon_file = new File("./resources/buttons/exit_icon.png");
             exit_icon = ImageIO.read(exit_icon_file);
+            exit_Rectangle = new Rectangle(750, 470, exit_icon.getWidth(), exit_icon.getHeight());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -557,8 +608,9 @@ public class GamePanel extends JPanel /* implements Runnable */{
         }
 
         try {
-            File restart_icon_file = new File("./resources/buttons/restart_button.png");
+            File restart_icon_file = new File("./resources/buttons/restart_icon.png");
             restart_icon = ImageIO.read(restart_icon_file);
+            restart_Rectangle = new Rectangle(450, 470, restart_icon.getWidth(), restart_icon.getHeight());
         } catch (IOException e) {
             e.printStackTrace();
         }
