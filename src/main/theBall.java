@@ -60,9 +60,7 @@ public class theBall {
         }
         if(x >= (BBmain.WIDTH - ball_size)){//ball size is calculated from top-right corner and not from the center
             dx = -dx;
-        }
-        if(y >= (BBmain.HEIGHT - ball_size)){
-            dy = -dy;
+            setX(BBmain.WIDTH - ball_size - 1);
         }
     }
 

@@ -2,11 +2,7 @@ package main;
 
 import java.util.ArrayList;
 
-import java.io.File;
-
 import javax.swing.JPanel;
-
-import javax.imageio.ImageIO;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -17,7 +13,6 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
-import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.awt.Rectangle;//rectangles to make hitbox
 
@@ -34,7 +29,6 @@ public class GamePanel extends JPanel /* implements Runnable */{
     //fields
     private boolean running;
     private boolean screen_shake_active;
-    private boolean game_pause;
     private BufferedImage main_image;
     private Graphics2D g_main;//main graphics handler
     private long display_start_time;
@@ -45,15 +39,10 @@ public class GamePanel extends JPanel /* implements Runnable */{
     private theBall main_ball;
     private thePaddel main_Paddel;
     private mouseMovement main_mouse_movement;
-    private mouseButtons main_mouse_buttons;
     private theMap main_map;
     private theHUD main_hud;
     private ArrayList<powerUps> powers;
     private ArrayList<brickSplosion> brickSplosions;
-
-    //buttons
-    private BufferedImage exit_icon, pause_icon, play_icon, restart_icon;
-    private Rectangle exit_Rectangle, pause_Rectangle, play_Rectangle, restart_Rectangle;
 
     //constructor
     public GamePanel(){
@@ -62,42 +51,36 @@ public class GamePanel extends JPanel /* implements Runnable */{
 
     //initializer
     public void init(int level_value){
-        running = true;
-        screen_shake_active = false;
-        game_pause = false;
-        screen_shake_timer = System.nanoTime();
+        this.running = true;
+        this.screen_shake_active = false;
+        this.screen_shake_timer = System.nanoTime();
 
-        main_image = new BufferedImage(BBmain.WIDTH, BBmain.HEIGHT, BufferedImage.TYPE_INT_RGB);
+        this.main_image = new BufferedImage(BBmain.WIDTH, BBmain.HEIGHT, BufferedImage.TYPE_INT_RGB);
 
-        g_main = (Graphics2D) main_image.getGraphics();
+        this.g_main = (Graphics2D) main_image.getGraphics();
 
-        g_main.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        this.g_main.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        main_ball = new theBall((BBmain.WIDTH/2 - 10), (BBmain.HEIGHT/2 + 100), 15);
+        this.main_ball = new theBall((BBmain.WIDTH/2 - 10), (BBmain.HEIGHT/2 + 100), 15);
 
-        main_Paddel = new thePaddel(80, 20);
+        this.main_Paddel = new thePaddel(80, 20);
 
-        main_mouse_movement = new mouseMovement();
-        addMouseMotionListener(main_mouse_movement);//adds mouse motion detection to panel
+        this.main_mouse_movement = new mouseMovement();
+        this.addMouseMotionListener(main_mouse_movement);//adds mouse motion detection to panel
 
-        main_mouse_buttons = new mouseButtons();//adds mouse buttons functionality to panel
-        addMouseListener(main_mouse_buttons);
+        this.level = level_value;
+        this.main_map = new theMap(level);
 
-        level = level_value;
-        main_map = new theMap(level);
+        this.main_hud = new theHUD();
 
-        main_hud = new theHUD();
+        this.powers = new ArrayList<powerUps>();
 
-        powers = new ArrayList<powerUps>();
+        this.brickSplosions = new ArrayList<brickSplosion>();
 
-        brickSplosions = new ArrayList<brickSplosion>();
+        this.play_sound("file:./resources/mute.wav", 0);//path is relative to current working directory
 
-        play_sound("file:./resources/mute.wav", 0);//path is relative to current working directory
-
-        play_start_level_sound();
-        reset_display_start_time();
-
-        set_buttons();
+        this.play_start_level_sound();
+        this.reset_display_start_time();
 
     }
 
@@ -109,9 +92,7 @@ public class GamePanel extends JPanel /* implements Runnable */{
     public void playing(){
         while(running){
             //update
-            if(!game_pause){
-                update();
-            }
+            update();
             
             //draw
             draw();
@@ -165,8 +146,6 @@ public class GamePanel extends JPanel /* implements Runnable */{
             main_map.draw(g_main);
             main_hud.drawHUD(g_main);
 
-            draw_buttons();
-
             for(powerUps power : powers){
                 power.draw(g_main);
             }
@@ -214,47 +193,6 @@ public class GamePanel extends JPanel /* implements Runnable */{
         public void mouseMoved(MouseEvent e) {
             main_Paddel.movePaddel(e.getX());
         }
-    }
-    private class mouseButtons implements MouseListener{
-
-        @Override
-        public void mouseClicked(MouseEvent e) {
-            int x = e.getX();
-            int y = e.getY();
-
-            if(pause_Rectangle.contains(x, y)){
-                game_pause = !game_pause;
-            }
-
-            if(restart_Rectangle.contains(x, y)){
-                
-            }
-
-            if(exit_Rectangle.contains(x,y)){
-                
-            }
-        }
-
-        @Override
-        public void mousePressed(MouseEvent e) {
-            // TODO Auto-generated method stub
-        }
-
-        @Override
-        public void mouseReleased(MouseEvent e) {
-            // TODO Auto-generated method stub
-        }
-
-        @Override
-        public void mouseEntered(MouseEvent e) {
-            // TODO Auto-generated method stub
-        }
-
-        @Override
-        public void mouseExited(MouseEvent e) {
-            // TODO Auto-generated method stub
-        }
-        
     }
 
     public void collision_check_paddel(){
@@ -427,7 +365,6 @@ public class GamePanel extends JPanel /* implements Runnable */{
                             }
                         }
 
-                        
                         break map_collision_loop;
                     }
                 }
@@ -531,7 +468,7 @@ public class GamePanel extends JPanel /* implements Runnable */{
             play_sound("file:./resources/next_level.wav", 0);
             //wait
             try{
-                Thread.sleep(1000);
+                Thread.sleep(1500);
             }catch(Exception e){
                 e.printStackTrace();
             }
@@ -542,6 +479,7 @@ public class GamePanel extends JPanel /* implements Runnable */{
     public void draw_loser(){
         play_sound("file:./resources/loser.wav", 0);
         
+        
         g_main.setFont(new Font("Roboto", Font.BOLD, 50));
         FontMetrics f_matrics = g_main.getFontMetrics();//including size of font
         int x = (BBmain.WIDTH - f_matrics.stringWidth("LOSER!!"))/2;
@@ -551,8 +489,6 @@ public class GamePanel extends JPanel /* implements Runnable */{
         g_main.setColor(Color.RED);
         g_main.drawString("LOSER!!", x, y + f_matrics.getHeight() - 5 );
 
-        g_main.drawImage(restart_icon, restart_Rectangle.x, restart_Rectangle.y, null);
-        g_main.drawImage(exit_icon, exit_Rectangle.x, exit_Rectangle.y, null);
         running = false;
     }
 
@@ -582,46 +518,4 @@ public class GamePanel extends JPanel /* implements Runnable */{
         play_sound("file:./resources/level_start.wav", 0);
     }
 
-    private void set_buttons(){
-        try {
-            File exit_icon_file = new File("./resources/buttons/exit_icon.png");
-            exit_icon = ImageIO.read(exit_icon_file);
-            exit_Rectangle = new Rectangle(750, 470, exit_icon.getWidth(), exit_icon.getHeight());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            File pause_icon_file = new File("./resources/buttons/pause_icon.png");
-            pause_icon = ImageIO.read(pause_icon_file);
-            pause_Rectangle = new Rectangle(150, 1, pause_icon.getWidth(), (int)(1.5 * pause_icon.getHeight()));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            File play_icon_file = new File("./resources/buttons/play_icon.png");
-            play_icon = ImageIO.read(play_icon_file);
-            play_Rectangle = new Rectangle(150, 1, play_icon.getWidth(), (int)(1.5 * play_icon.getHeight()));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            File restart_icon_file = new File("./resources/buttons/restart_icon.png");
-            restart_icon = ImageIO.read(restart_icon_file);
-            restart_Rectangle = new Rectangle(450, 470, restart_icon.getWidth(), restart_icon.getHeight());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void draw_buttons(){
-        if(game_pause){
-            g_main.drawImage(play_icon, play_Rectangle.x, play_Rectangle.y, null);
-        }else{
-            g_main.drawImage(pause_icon, pause_Rectangle.x, pause_Rectangle.y, null);
-        }
-        
-    }
 }
