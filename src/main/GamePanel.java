@@ -238,12 +238,12 @@ public class GamePanel extends JPanel /* implements Runnable */{
                 game_pause = !game_pause;
             }
 
-            if(restart_Rectangle.contains(x, y)){
+            if(restart_Rectangle != null && restart_Rectangle.contains(x, y)){//resets same level;
                 init(level);
             }
 
-            if(exit_Rectangle.contains(x,y)){
-                
+            if(exit_Rectangle != null && exit_Rectangle.contains(x,y)){//exits game
+                System.exit(0);
             }
         }
 
@@ -555,6 +555,26 @@ public class GamePanel extends JPanel /* implements Runnable */{
         if(!game_pause){
             play_sound("file:./resources/loser.wav", 0);
         }
+
+        try {//exit button
+            if(exit_icon == null){
+                File exit_icon_file = new File("./resources/buttons/exit_icon.png");
+                exit_icon = ImageIO.read(exit_icon_file);
+            }
+            exit_Rectangle = new Rectangle(750, 470, exit_icon.getWidth(), exit_icon.getHeight());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {//restart button
+            if(restart_icon == null){
+                File restart_icon_file = new File("./resources/buttons/restart_icon.png");
+                restart_icon = ImageIO.read(restart_icon_file);
+            }
+            restart_Rectangle = new Rectangle(450, 470, restart_icon.getWidth(), restart_icon.getHeight());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         
         g_main.setFont(new Font("Roboto", Font.BOLD, 50));
         FontMetrics f_matrics = g_main.getFontMetrics();//including size of font
@@ -598,34 +618,30 @@ public class GamePanel extends JPanel /* implements Runnable */{
     }
 
     private void set_buttons(){
+
+        exit_Rectangle = null;
+        restart_Rectangle = null;
+
         try {
-            File exit_icon_file = new File("./resources/buttons/exit_icon.png");
-            exit_icon = ImageIO.read(exit_icon_file);
-            exit_Rectangle = new Rectangle(750, 470, exit_icon.getWidth(), exit_icon.getHeight());
+            if(pause_icon == null){
+                File pause_icon_file = new File("./resources/buttons/pause_icon.png");
+                pause_icon = ImageIO.read(pause_icon_file);
+            }
+            if(pause_Rectangle == null){
+                pause_Rectangle = new Rectangle(150, 1, pause_icon.getWidth(), (int)(1.5 * pause_icon.getHeight()));
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         try {
-            File pause_icon_file = new File("./resources/buttons/pause_icon.png");
-            pause_icon = ImageIO.read(pause_icon_file);
-            pause_Rectangle = new Rectangle(150, 1, pause_icon.getWidth(), (int)(1.5 * pause_icon.getHeight()));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            File play_icon_file = new File("./resources/buttons/play_icon.png");
-            play_icon = ImageIO.read(play_icon_file);
-            play_Rectangle = new Rectangle(150, 1, play_icon.getWidth(), (int)(1.5 * play_icon.getHeight()));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            File restart_icon_file = new File("./resources/buttons/restart_icon.png");
-            restart_icon = ImageIO.read(restart_icon_file);
-            restart_Rectangle = new Rectangle(450, 470, restart_icon.getWidth(), restart_icon.getHeight());
+            if(play_icon == null){
+                File play_icon_file = new File("./resources/buttons/play_icon.png");
+                play_icon = ImageIO.read(play_icon_file);
+            }
+            if(play_Rectangle == null){
+                play_Rectangle = new Rectangle(150, 1, play_icon.getWidth(), (int)(1.5 * play_icon.getHeight()));
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
