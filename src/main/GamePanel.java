@@ -18,6 +18,8 @@ import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.awt.Rectangle;//rectangles to make hitbox
 
@@ -46,6 +48,7 @@ public class GamePanel extends JPanel /* implements Runnable */{
     private thePaddel main_Paddel;
     private mouseMovement main_mouse_movement;
     private mouseButtons main_mouse_buttons;
+    private key_listener main_key_listener;
     private theMap main_map;
     private theHUD main_hud;
     private ArrayList<powerUps> powers;
@@ -86,6 +89,13 @@ public class GamePanel extends JPanel /* implements Runnable */{
         if(main_mouse_buttons == null){
             main_mouse_buttons = new mouseButtons();//adds mouse buttons functionality to panel
             addMouseListener(main_mouse_buttons);
+        }
+
+        if(main_key_listener == null){
+            main_key_listener = new key_listener();//adds key listener
+           addKeyListener(main_key_listener);
+           setFocusable(true); // Ensure the GamePanel can receive focus, without this keylistener is not working;
+           requestFocusInWindow();
         }
 
         level = level_value;
@@ -235,15 +245,15 @@ public class GamePanel extends JPanel /* implements Runnable */{
             int y = e.getY();
 
             if(pause_Rectangle.contains(x, y)){
-                game_pause = !game_pause;
+                pause_game();
             }
 
             if(restart_Rectangle != null && restart_Rectangle.contains(x, y)){//resets same level;
-                init(level);
+                restart_level();
             }
 
             if(exit_Rectangle != null && exit_Rectangle.contains(x,y)){//exits game
-                System.exit(0);
+                exit_game();
             }
         }
 
@@ -267,6 +277,33 @@ public class GamePanel extends JPanel /* implements Runnable */{
             // TODO Auto-generated method stub
         }
         
+    }
+
+    private class key_listener implements KeyListener{
+
+        @Override
+        public void keyTyped(KeyEvent e) {
+        }
+
+        @Override
+        public void keyPressed(KeyEvent e) {
+            if(e.getKeyCode() == 32){
+                pause_game();
+            }
+
+            if(e.getKeyCode() == 82){
+                restart_level();
+            }
+
+            if(e.getKeyCode() == 27){
+                exit_game();
+            }
+        }
+
+        @Override
+        public void keyReleased(KeyEvent e) {
+        }
+
     }
 
     public void collision_check_paddel(){
@@ -654,5 +691,17 @@ public class GamePanel extends JPanel /* implements Runnable */{
             g_main.drawImage(pause_icon, pause_Rectangle.x, pause_Rectangle.y, null);
         }
         
+    }
+
+    private void pause_game(){
+        game_pause = !game_pause;
+    }
+
+    private void restart_level(){
+        init(level);
+    }
+
+    private void exit_game(){
+        System.exit(0);
     }
 }
