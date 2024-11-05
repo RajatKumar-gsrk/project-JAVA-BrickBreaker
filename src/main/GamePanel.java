@@ -66,30 +66,42 @@ public class GamePanel extends JPanel /* implements Runnable */{
         screen_shake_active = false;
         game_pause = false;
         screen_shake_timer = System.nanoTime();
+        if(main_image == null){
+            main_image = new BufferedImage(BBmain.WIDTH, BBmain.HEIGHT, BufferedImage.TYPE_INT_RGB);
+            g_main = (Graphics2D) main_image.getGraphics();
+            g_main.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        }
 
-        main_image = new BufferedImage(BBmain.WIDTH, BBmain.HEIGHT, BufferedImage.TYPE_INT_RGB);
-
-        g_main = (Graphics2D) main_image.getGraphics();
-
-        g_main.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        
 
         main_ball = new theBall((BBmain.WIDTH/2 - 10), (BBmain.HEIGHT/2 + 100), 15);
 
         main_Paddel = new thePaddel(80, 20);
 
-        main_mouse_movement = new mouseMovement();
-        addMouseMotionListener(main_mouse_movement);//adds mouse motion detection to panel
+        if(main_mouse_movement == null){
+            main_mouse_movement = new mouseMovement();
+            addMouseMotionListener(main_mouse_movement);//adds mouse motion detection to panel
+        }
 
-        main_mouse_buttons = new mouseButtons();//adds mouse buttons functionality to panel
-        addMouseListener(main_mouse_buttons);
+        if(main_mouse_buttons == null){
+            main_mouse_buttons = new mouseButtons();//adds mouse buttons functionality to panel
+            addMouseListener(main_mouse_buttons);
+        }
 
         level = level_value;
+
         main_map = new theMap(level);
 
         main_hud = new theHUD();
 
+        if(powers != null){
+            powers.clear();
+        }
         powers = new ArrayList<powerUps>();
 
+        if(brickSplosions != null){
+            brickSplosions.clear();
+        }
         brickSplosions = new ArrayList<brickSplosion>();
 
         play_sound("file:./resources/mute.wav", 0);//path is relative to current working directory
