@@ -19,11 +19,11 @@ public class theBall {
         x = x_value;
         y = y_value;
 
-        double[] dx_value = {-4, -3, -2, 2, 3, 4};
+        double[] dx_value = {-3, -2, 2, 3};
         int dx_value_indx = new Random().nextInt(dx_value.length);//select random int from array size
         dx = dx_value[dx_value_indx];
         
-        dy = 6;
+        dy = 8;
 
         ball_size = ball_size_value;
         

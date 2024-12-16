@@ -598,7 +598,7 @@ public class GamePanel extends JPanel /* implements Runnable */{
                 File exit_icon_file = new File("./resources/buttons/exit_icon.png");
                 exit_icon = ImageIO.read(exit_icon_file);
             }
-            exit_Rectangle = new Rectangle(750, 470, exit_icon.getWidth(), exit_icon.getHeight());
+            exit_Rectangle = new Rectangle(1125, 705, exit_icon.getWidth(), exit_icon.getHeight());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -608,7 +608,7 @@ public class GamePanel extends JPanel /* implements Runnable */{
                 File restart_icon_file = new File("./resources/buttons/restart_icon.png");
                 restart_icon = ImageIO.read(restart_icon_file);
             }
-            restart_Rectangle = new Rectangle(450, 470, restart_icon.getWidth(), restart_icon.getHeight());
+            restart_Rectangle = new Rectangle(725, 705, restart_icon.getWidth(), restart_icon.getHeight());
         } catch (IOException e) {
             e.printStackTrace();
         }

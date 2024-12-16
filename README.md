@@ -26,3 +26,7 @@ also created a launch.json to set working directory to root everytime the projec
 <br>
 <br>
 Keep in mind, to use the jar file you also need the resources directory.
+
+<br>
+<br>
+DON't CHANGE RESOLUTION
